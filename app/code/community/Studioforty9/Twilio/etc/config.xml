@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Studioforty9_Twilio
+ *
+ * @category  Studioforty9
+ * @package   Studioforty9_Twilio
+ * @author    StudioForty9 <info@studioforty9.com>
+ * @copyright 2015 StudioForty9 (http://www.studioforty9.com)
+ * @license   https://github.com/studioforty9/twilio/blob/master/LICENCE BSD
+ * @version   1.0.0
+ * @link      https://github.com/studioforty9/twilio
+ */
+-->
+<config>
+    <modules>
+        <Studioforty9_Twilio>
+            <version>1.0.0</version>
+        </Studioforty9_Twilio>
+    </modules>
+    <global>
+        <blocks>
+            <studioforty9_twilio>
+                <class>Studioforty9_Twilio_Block</class>
+            </studioforty9_twilio>
+        </blocks>
+        <helpers>
+            <studioforty9_twilio>
+                <class>Studioforty9_Twilio_Helper</class>
+            </studioforty9_twilio>
+        </helpers>
+        <models>
+            <studioforty9_twilio>
+                <class>Studioforty9_Twilio_Model</class>
+            </studioforty9_twilio>
+        </models>
+    </global>
+    <frontend>
+        <translate>
+            <modules>
+                <studioforty9_twilio>
+                    <files>
+                        <default>Studioforty9_Twilio.csv</default>
+                    </files>
+                </studioforty9_twilio>
+            </modules>
+        </translate>
+    </frontend>
+    <adminhtml>
+        <acl>
+            <resources>
+                <admin>
+                    <children>
+                        <system>
+                            <children>
+                                <config>
+                                    <children>
+                                        <studioforty9_twilio translate="title" module="studioforty9_twilio">
+                                            <title>Twilio Configuration Settings</title>
+                                        </studioforty9_twilio>
+                                    </children>
+                                </config>
+                            </children>
+                        </system>
+                    </children>
+                </admin>
+            </resources>
+        </acl>
+    </adminhtml>
+    <phpunit>
+        <suite>
+            <modules>
+                <Studioforty9_Twilio />
+            </modules>
+        </suite>
+    </phpunit>
+</config>
