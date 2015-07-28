@@ -22,11 +22,25 @@ Add the repository to your project composer.json file:
 
 ## Usage
 
+Via the helper method (uses your configuration settings)
+
 ```php
 
-$sms = new Studioforty9_Twilio_Model_Sms($accountId, $authToken);
+$response = Mage::helper('studioforty9_twilio')->sendMesssage($to, $from, $message);
 
-$sms->setTo('+12345678901')
+```
+
+Via the model (add your Account ID and Auth Token manually)
+
+```php
+
+//$sms = new Studioforty9_Twilio_Model_Sms(array('accountId' => $accountId, 'authToken' => $authToken));
+$sms = Mage::getModel('studioforty9_twilio/sms', array(
+    'accountId' => $accountId, 
+    'authToken' => $authToken
+));
+
+$response = $sms->setTo('+12345678901')
   ->setFrom('+12345678901')
   ->setBody('Your message')
   ->send();
