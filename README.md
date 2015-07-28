@@ -22,19 +22,23 @@ Add the repository to your project composer.json file:
 
 ## Usage
 
-Via the helper method (uses your configuration settings)
+#### Via the helper method (uses your configuration settings)
 
 ```php
-
 $response = Mage::helper('studioforty9_twilio')->sendMesssage($to, $from, $message);
 
 ```
 
-Via the model (add your Account ID and Auth Token manually)
+#### Via the model (add your Account ID and Auth Token manually)
 
 ```php
-
-//$sms = new Studioforty9_Twilio_Model_Sms(array('accountId' => $accountId, 'authToken' => $authToken));
+/* You can 'new' up an object like this:
+$sms = new Studioforty9_Twilio_Model_Sms(array(
+    'accountId' => $accountId, 
+    'authToken' => $authToken
+));
+*/
+// Or use the typical Magento getModel approach
 $sms = Mage::getModel('studioforty9_twilio/sms', array(
     'accountId' => $accountId, 
     'authToken' => $authToken
@@ -44,6 +48,20 @@ $response = $sms->setTo('+12345678901')
   ->setFrom('+12345678901')
   ->setBody('Your message')
   ->send();
+
+```
+
+#### Using a custom HTTP client
+
+If you need to use a custom HTTP client for any reason (we use `Varien_Http_Client` by default) - you can inject an intance of `Zend_Http_Client` into the `Studioforty9_Twilio_Model_Sms` class via the `$config` array.
+
+```php
+$client = new Zend_Http_Client();
+$sms = Mage::getModel('studioforty9_twilio/sms', array(
+    'accountId' => $accountId, 
+    'authToken' => $authToken,
+    'client'    => $client
+));
 
 ```
 
