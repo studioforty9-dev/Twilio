@@ -19,7 +19,7 @@
  * @subpackage Model
  * @author     StudioForty9 <info@studioforty9.com>
  */
-class Studioforty9_Twilio_Model_Sms
+class Studioforty9_Twilio_Model_Sms extends Mage_Core_Model_Abstract
 {
     /** @var string */
     protected $_endpoint = 'https://api.twilio.com/2010-04-01/';
@@ -45,17 +45,28 @@ class Studioforty9_Twilio_Model_Sms
     /**
      * Construct a new SMS model.
      *
-     * @param string                $accountId
-     * @param string                $authToken
-     * @param Zend_Http_Client|null $client
+     * @param  array $config
+     * @throws InvalidArgumentException
      */
-    public function __construct($accountId, $authToken, Zend_Http_Client $client = null)
+    public function __construct($config = array())
     {
-        $this->_accountId = $accountId;
-        $this->_authToken = $authToken;
-        $this->_client = is_null($client)
+        if (!isset($config['accountId']) || empty($config['accountId'])) {
+            throw new InvalidArgumentException('Missing Account ID parameter.');
+        }
+
+        if (!isset($config['authToken']) || empty($config['authToken'])) {
+            throw new InvalidArgumentException('Missing Auth Token parameter.');
+        }
+
+        if (isset($config['client']) && !$config['client'] instanceof Zend_Http_Client) {
+            throw new InvalidArgumentException('Invalid Http Client, you must use or extend Zend_Http_Client.');
+        }
+
+        $this->_accountId = $config['accountId'];
+        $this->_authToken = $config['authToken'];
+        $this->_client = (!isset($config['client']) || !$config['client'] instanceof Zend_Http_Client)
             ? new Varien_Http_Client()
-            : $client;
+            : $config['client'];
     }
 
     /** @var Zend_Http_Client */

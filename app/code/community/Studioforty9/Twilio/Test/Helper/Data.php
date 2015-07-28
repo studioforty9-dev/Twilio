@@ -54,7 +54,59 @@ class Studioforty9_Twilio_Test_Helper_Data extends EcomDev_PHPUnit_Test_Case
     }
 
     /**
-     * Get a mock helper object. More for reference than anything else right now.
+     * @test
+     */
+    public function it_can_send_message_using_configuration_for_auth_credentials()
+    {
+        $this->getHelperMockObject(array(
+            'isEnabled'    => array('return' => true, 'expect' => $this->once()),
+            'getAccountId' => array('return' => 'foo', 'expect' => $this->once()),
+            'getAuthToken' => array('return' => 'bar', 'expect' => $this->once())
+        ));
+
+        $mockClient = new Zend_Http_Client();
+        $mockClient->setAdapter(new Zend_Http_Client_Adapter_Test());
+
+        $this->getMockModelObject($disableConstructor = true, array(
+            'getClient' => array('return' => $mockClient, 'expect' => $this->any()),
+            'send'      => array('return' => array('baz'), 'expect' => $this->once())
+        ));
+
+        Mage::helper($this->_alias)->sendMessage('+353861234567', '+353867654321', 'Hello!');
+    }
+
+    /**
+     * Get a mock studioforty9_twilio/sms model object.
+     *
+     * @param  bool  $disableConstructor
+     * @param  array $methods
+     * @return mixed
+     */
+    private function getMockModelObject($disableConstructor = true, $methods = array())
+    {
+        $mock = $this->getModelMockBuilder('studioforty9_twilio/sms');
+
+        if ($disableConstructor) {
+            $mock->disableOriginalConstructor();
+        }
+
+        if (empty($methods)) {
+            return $mock->getMock();
+        }
+        $methodNames = array_keys($methods);
+        $mock = $mock->setMethods($methodNames)->getMock();
+        foreach ($methods as $name => $options) {
+            if (isset($options['expect']) && isset($options['return'])) {
+                $mock->expects(isset($options['expect']) ? $options['expect'] : $this->any())
+                    ->method($name)
+                    ->will($this->returnValue($options['return']));
+            }
+        }
+        $this->replaceByMock('model', 'studioforty9_twilio/sms', $mock);
+    }
+
+    /**
+     * Get a mock studioforty9_twilio/data helper object.
      *
      * @param  array $methods
      * @return mixed

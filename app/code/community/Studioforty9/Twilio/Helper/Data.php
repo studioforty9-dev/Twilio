@@ -28,7 +28,7 @@ class Studioforty9_Twilio_Helper_Data extends Mage_Core_Helper_Abstract
      */
     public function isEnabled()
     {
-        return Mage::getStoreConfigFlag('studioforty9_twilio/settings/enabled');
+        return (bool) Mage::getStoreConfigFlag('studioforty9_twilio/settings/enabled');
     }
 
     /**
@@ -49,5 +49,28 @@ class Studioforty9_Twilio_Helper_Data extends Mage_Core_Helper_Abstract
     public function getAccountId()
     {
         return Mage::getStoreConfig('studioforty9_twilio/auth/account_id');
+    }
+
+    /**
+     * Send a message via Twilio's API.
+     *
+     * @param  string $to
+     * @param  string $from
+     * @param  string $message
+     * @return array
+     * @throws RuntimeException
+     */
+    public function sendMessage($to, $from, $message)
+    {
+        if (!$this->isEnabled()) {
+            throw new RuntimeException('The Twilio extension is disabled via configuration.');
+        }
+
+        $sms = Mage::getModel('studioforty9_twilio/sms', array(
+            'accountId' => $this->getAccountId(),
+            'authToken' => $this->getAuthToken()
+        ));
+        $sms->setTo($to)->setFrom($from)->setBody($message);
+        return $sms->send();
     }
 }
